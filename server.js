@@ -20,7 +20,6 @@ const db = mysql.createConnection({
   database: 'testdb',
 });
 
-
 db.connect(err => {
   if (err) throw err;
   console.log('MySQL Connected...');
@@ -48,6 +47,16 @@ app.get('/', (req, res) => {
 
 app.get('/api/data', (req, res) => {
   res.json({ message: 'This is a REST API route!' });
+});
+
+app.get('/api/job-leads', async (req, res) => {
+  try {
+    const jobLeads = await getJobLeads(); // Call the function to get leads
+    res.json(jobLeads);
+  } catch (err) {
+    console.error('Error fetching job leads:', err);
+    res.status(500).json({ error: 'Failed to fetch job leads' });
+  }
 });
 
 app.get('/testdb', (req, res) => {
