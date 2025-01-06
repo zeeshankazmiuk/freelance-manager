@@ -3,10 +3,14 @@ const http = require('http');
 const { Server } = require('socket.io');
 const mysql = require('mysql2');
 const mongoose = require('mongoose');
+const cors = require('cors'); // Import the CORS package
 
 // Initialize Express App
 const app = express();
 const port = 3001;
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Create HTTP Server for Socket.io
 const server = http.createServer(app);
