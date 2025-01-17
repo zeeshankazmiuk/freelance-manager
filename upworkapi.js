@@ -1,11 +1,11 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const UPWORK_ACCESS_TOKEN = 'your_access_token_here'; // Replace with actual access token
+const UPWORK_ACCESS_TOKEN = 'will put access token here later'; 
 
-// Example function to fetch job leads
+// fetch job leads
 const getJobLeads = async () => {
-  const url = 'https://www.upwork.com/api/v3/jobs/search.json'; // Example endpoint
+  const url = 'will place endpoint here later';
 
   try {
     const response = await axios.get(url, {
@@ -13,8 +13,8 @@ const getJobLeads = async () => {
         Authorization: `Bearer ${UPWORK_ACCESS_TOKEN}`
       },
       params: {
-        q: 'JavaScript',  // Search query, modify based on your needs
-        category: 'Web Development' // Example category, can be changed
+        q: 'JavaScript',  // test search querey - to be changed later
+        category: 'Web Development' // test category - to be changed later
       }
     });
 
@@ -24,5 +24,5 @@ const getJobLeads = async () => {
   }
 };
 
-// Fetch job leads
+// fetch job leads
 getJobLeads();

@@ -8,7 +8,7 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
-  win.loadURL('http://localhost:3000'); // React's development server
+  win.loadURL('http://localhost:3000');
 }
 
 app.on('ready', createWindow);

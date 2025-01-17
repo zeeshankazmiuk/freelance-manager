@@ -5,18 +5,18 @@ const mysql = require('mysql2');
 const mongoose = require('mongoose');
 const cors = require('cors'); // Import the CORS package
 
-// Initialize Express App
+// initialize express
 const app = express();
 const port = 3001;
 
-// Enable CORS for all routes
+// enable cors
 app.use(cors());
 
-// Create HTTP Server for Socket.io
+// create server for socketio
 const server = http.createServer(app);
 const io = new Server(server);
 
-// MySQL Database Connection
+// mysql database connection
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -29,13 +29,13 @@ db.connect(err => {
   console.log('MySQL Connected...');
 });
 
-// MongoDB Connection - If you still need it for messages or other data, otherwise remove it
+// mongodb connection
 mongoose
   .connect('mongodb://localhost:27017/testdb')
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
-// Socket.io Setup
+// socketio steup
 io.on('connection', socket => {
   console.log('A user connected');
   socket.on('message', msg => console.log(msg));
@@ -44,9 +44,8 @@ io.on('connection', socket => {
   });
 });
 
-// Routes
 
-// Route to get all jobs
+// route to get jobs
 app.get('/api/jobs', (req, res) => {
   db.query('SELECT * FROM jobs', (err, results) => {
     if (err) {
@@ -57,7 +56,7 @@ app.get('/api/jobs', (req, res) => {
   });
 });
 
-// Route to get a single job by ID
+// route to get a single job
 app.get('/api/jobs/:id', (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM jobs WHERE id = ?', [id], (err, results) => {
@@ -73,7 +72,7 @@ app.get('/api/jobs/:id', (req, res) => {
   });
 });
 
-// Route to add a new job
+// route to add new job
 app.post('/api/jobs', (req, res) => {
   const { title, description, budget, skills, client_rating, posted_date } = req.body;
   const query = 'INSERT INTO jobs (title, description, budget, skills, client_rating, posted_date) VALUES (?, ?, ?, ?, ?, ?)';
@@ -88,7 +87,7 @@ app.post('/api/jobs', (req, res) => {
   });
 });
 
-// Test route to check database connection (optional)
+// test route to check database conneciton
 app.get('/testdb', (req, res) => {
   const sql = 'SELECT 1 + 1 AS solution';
   db.query(sql, (err, results) => {
@@ -97,12 +96,12 @@ app.get('/testdb', (req, res) => {
   });
 });
 
-// Default route
+// default
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-// Start the Server
+// start server
 server.listen(port, () => {
   console.log(`Server with Socket.io running at http://localhost:${port}`);
 });
