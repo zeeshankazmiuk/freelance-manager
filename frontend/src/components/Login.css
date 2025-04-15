@@ -1,0 +1,11 @@
+/* Login.css */
+.login-container {
+    margin: auto;
+    padding: 20px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.error-text {
+    color: red;
+}

@@ -1,0 +1,14 @@
+.UserButton {
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .UserButton:hover {
+    background-color: #5b6eae;
+  }
+  

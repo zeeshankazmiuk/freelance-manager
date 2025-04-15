@@ -1,140 +1,127 @@
 import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
 import './App.css';
+import JobsPage from './pages/JobsPage';
+import TasksPage from './pages/TasksPage';
+import YourTasksPage from './pages/YourTasksPage';
+import DMsPage from './pages/DMsPage';
+import FindJobsPage from './pages/FindJobsPage';
+import Login from './components/Login';
+import UserButton from './components/UserButton';
+import { fetchUsers } from './services/apiService';
 
-/* login */
-function Login({ onLogin }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+function App() {
+  const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('jobs');
+  const [users, setUsers] = useState([]);
+  const [dmRooms, setDmRooms] = useState(JSON.parse(localStorage.getItem('dmRooms')) || []);
+  const [showLogout, setShowLogout] = useState(false);
+  const dmsRef = useRef();
 
-  const handleLoginClick = () => {
-    if (username === 'testlogin' && password === 'testlogin') {
-      onLogin();
-    } else {
-      setErrorMsg('Incorrect username or password.');
+
+  const handleLogin = (username, role) => setUser({ username, role });
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');  // or however you're handling auth
+    window.location.reload();         // refresh to kick back to login screen
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchUsers()
+        .then(response => setUsers(response.data))
+        .catch(() => console.error("Failed to load users"));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem('dmRooms', JSON.stringify(dmRooms));
+  }, [dmRooms]);
+
+  const handleUserClick = (username) => {
+    if (user.username !== username) {
+      handleStartDM(username);
     }
   };
 
-  return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <div>
-        <label>Username</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter username"
-        />
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter password"
-        />
-      </div>
-      <button onClick={handleLoginClick}>Login</button>
+  const generateRoomName = (user1, user2) => {
+    return [user1, user2].sort().join('-');
+  };
 
-      {errorMsg && <p className="error-text">{errorMsg}</p>}
+  const handleStartDM = (otherUsername) => {
+    const roomName = generateRoomName(user.username, otherUsername);
+  
+    if (!dmRooms.includes(roomName)) {
+      const updatedRooms = [...dmRooms, roomName];
+      setDmRooms(updatedRooms);
+    }
+  
+    setActiveTab('dms');
+    setTimeout(() => {
+      if (dmsRef.current && dmsRef.current.addDMRoom) {
+        dmsRef.current.addDMRoom(roomName);
+      }
+    }, 0);
+  };  
+  
+
+  const renderUsers = () => (
+    <div className="user-sidebar">
+      <h3>Online Users</h3>
+      <ul>
+        {users.map(u => (
+          <li key={u.username}>
+            <UserButton 
+              username={u.username} 
+              onClick={handleUserClick}
+              currentUsername={user.username}
+              onStartDM={handleStartDM}
+            /> 
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // jobs and chat //
-  const [activeTab, setActiveTab] = useState('jobs');
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch('http://localhost:3001/api/jobs')
-      .then((response) => response.json())
-      .then((data) => {
-        setJobs(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError('Failed to fetch jobs');
-        setLoading(false);
-      });
-  }, []);
-
-
-
-  // show login screen
-  if (!isLoggedIn) {
-    return <Login onLogin={() => setIsLoggedIn(true)} />;
+  if (!user) {
+    return <Login onAuth={handleLogin} />;
   }
-
-  // loading after login
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="App">
-      {/* left sidebar */}
       <div className="sidebar">
-        <button
-          className={activeTab === 'jobs' ? 'active' : ''}
-          onClick={() => setActiveTab('jobs')}
-        >
-          Jobs
-        </button>
-        <button
-          className={activeTab === 'chat' ? 'active' : ''}
-          onClick={() => setActiveTab('chat')}
-        >
-          Chat
-        </button>
+        <button className={activeTab === 'find-jobs' ? 'active' : ''} onClick={() => setActiveTab('find-jobs')}>Find Jobs</button>
+        <button className={activeTab === 'jobs' ? 'active' : ''} onClick={() => setActiveTab('jobs')}>Jobs</button>
+        {user.role === 'mentee' && (
+          <button className={activeTab === 'tasks' ? 'active' : ''} onClick={() => setActiveTab('tasks')}>Tasks</button>
+        )}
+        {(user.role === 'admin' || user.role === 'mentor') && (
+          <button className={activeTab === 'your-tasks' ? 'active' : ''} onClick={() => setActiveTab('your-tasks')}>Your Tasks</button>
+        )}
+        <button className={activeTab === 'dms' ? 'active' : ''} onClick={() => setActiveTab('dms')}>DMs</button>
+        <div className="user-info" onClick={() => setShowLogout(!showLogout)}>
+          <span>{user.username}</span>
+          {showLogout && (
+            <button className="logout-button" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* main */}
-      <div className="main-content">
-        {activeTab === 'jobs' && (
-          <div>
-            <h1>Job Listings</h1>
-            {jobs.length > 0 ? (
-              <ul>
-                {jobs.map((job) => (
-                  <li key={job.id}>
-                    <h2>{job.title}</h2>
-                    <p>{job.description}</p>
-                    <p><strong>Budget:</strong> ${job.budget}</p>
-                    <p><strong>Skills:</strong> {job.skills}</p>
-                    <p><strong>Client Rating:</strong> {job.client_rating}</p>
-                    <p><strong>Posted Date:</strong> {job.posted_date}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No jobs available</p>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'chat' && (
-          <div>
-            <h1>Chat</h1>
-            <p>Chat functionality to be added later</p>
+      <div className="content">
+        {activeTab === 'jobs' && <JobsPage user={user} />}
+        {activeTab === 'tasks' && <TasksPage user={user} onStartDM={handleStartDM} />}
+        {activeTab === 'your-tasks' && <YourTasksPage user={user} onStartDM={handleStartDM} />}
+        {activeTab === 'dms' && <DMsPage ref={dmsRef} user={user} dmRooms={dmRooms} setDmRooms={setDmRooms} />}
+        {activeTab === 'find-jobs' && (
+          <div className="w-full flex justify-center">
+            <FindJobsPage user={user} />
           </div>
         )}
       </div>
 
-      {/* right sidebar */}
-      <div className="user-sidebar">
-        <h3>Online Users</h3>
-        <ul>
-          {/* single user, special class for black text */}
-          <li className="currentUser">testlogin (You)</li>
-          {/* note to self: test users here or array of users mapped over here*/}
-        </ul>
-      </div>
+      {renderUsers()}
     </div>
   );
 }
