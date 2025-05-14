@@ -1,4 +1,4 @@
-// routes/scrapeRoutes.js
+// get jobs from upwork
 const express = require('express');
 const router = express.Router();
 const scrapeJobs = require('../scrapeJobs');
@@ -14,7 +14,7 @@ router.get('/scrape-jobs', async (req, res) => {
         res.json(jobs);
 
     } catch (err) {
-        console.error('❌ Error scraping jobs:', err);
+        console.error('Error scraping jobs:', err);
         res.status(500).json({ error: 'Failed to scrape jobs' });
     }
 });

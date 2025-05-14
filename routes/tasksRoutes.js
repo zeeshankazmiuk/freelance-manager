@@ -8,7 +8,7 @@ router.get('/test', (req, res) => {
   res.json({ message: "tasksRoutes.js is working properly." });
 });
 
-// ✅ Fetch all tasks (Visible to mentees)
+// fetch tasks
 router.get('/all-tasks', (req, res) => {
   db.query('SELECT * FROM tasks', (err, results) => {
     if (err) return res.status(500).json({ error: 'Database error' });
@@ -16,7 +16,7 @@ router.get('/all-tasks', (req, res) => {
   });
 });
 
-// ✅ API to assign a task to a mentee
+// assign task to mentee
 router.post('/assign-task', (req, res) => {
   const { taskId, username } = req.body;
 
@@ -34,7 +34,7 @@ router.post('/assign-task', (req, res) => {
   });
 });
 
-// ✅ Fetch tasks created by a specific user (Admin/Mentor)
+// fetch tasks created by a specific admin o rmentor
 router.get('/your-tasks/:username', (req, res) => {
   const { username } = req.params;
 
@@ -49,13 +49,13 @@ router.get('/your-tasks/:username', (req, res) => {
 });
 
 
-// ✅ Add a new task to a job (and record who created it)
+// add new task to a job
 router.post('/create-task', (req, res) => {
 
   const { job_id, title, description, tags, created_by } = req.body;
 
   if (!job_id || !title || !description || !created_by) {
-    console.error("❌ Missing required fields:", { job_id, title, description, created_by });
+    console.error("Missing required fields:", { job_id, title, description, created_by });
     return res.status(400).json({ error: 'Job ID, Title, Description, and Creator are required.' });
   }
 

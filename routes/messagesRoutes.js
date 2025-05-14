@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// Get messages for a room
+// get messages for a DM room
 router.get('/messages/:room', (req, res) => {
-  //const { room } = req.params;
   const encodedRoom = req.params.room;
   const room = decodeURIComponent(encodedRoom);
 
@@ -17,7 +16,7 @@ router.get('/messages/:room', (req, res) => {
   });
 });
 
-// Post a new message
+// send a message
 router.post('/postmessage', (req, res) => {
   const { room, sender, content } = req.body;
   const query = 'INSERT INTO messages (room, sender, content) VALUES (?, ?, ?)';

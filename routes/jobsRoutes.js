@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('./../db');
 
-// ✅ Get all jobs
+// get jobs
 router.get('/jobs', (req, res) => {
   const { claimed_by } = req.query;
 
@@ -33,7 +33,7 @@ router.post("/jobs", (req, res) => {
 });
 
 
-// ✅ Get tasks for a specific job
+// get tasks for a specific job
 router.get('/tasks/:jobId', (req, res) => {
   const { jobId } = req.params;
   db.query('SELECT * FROM tasks WHERE job_id = ?', [jobId], (err, results) => {
@@ -42,7 +42,7 @@ router.get('/tasks/:jobId', (req, res) => {
   });
 });
 
-// ✅ Add a new task to a job
+// add new task to a job
 router.post('/tasks', (req, res) => {
   const { job_id, description, created_by } = req.body;
   if (!job_id || !description || !created_by) {

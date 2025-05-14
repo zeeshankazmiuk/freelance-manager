@@ -1,11 +1,104 @@
 /* Login.css */
-.login-container {
-    margin: auto;
-    padding: 20px;
-    max-width: 400px;
-    text-align: center;
-}
+/*body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #e0e7ec, #f2f5f8);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }*/
 
-.error-text {
-    color: red;
-}
+  .login-wrapper {
+    background: linear-gradient(to right, #e0e7ec, #f2f5f8);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 80px;
+  }
+  
+  
+  /* 👇 THIS makes it a square-ish card */
+  .login-container {
+    margin-top: 160px;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    min-height: 440px; /* Adjust height to form a square-ish card */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Heading */
+  .login-container h1 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #1f2937;
+  }
+  
+  /* Label + Input styling */
+  .login-container label {
+    text-align: left;
+    margin: 12px 0 6px;
+    font-size: 14px;
+    color: #4b5563;
+  }
+  
+  .login-container input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #cbd5e1;
+    background-color: transparent;
+    outline: none;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .login-container input:focus {
+    border-color: #2563eb;
+  }
+  
+  /* Login Button */
+  .login-container button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #2563eb, #1d4ed8);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .login-container button:hover {
+    background: linear-gradient(to right, #1d4ed8, #1e40af);
+  }
+  
+  /* Forgot Password */
+  .forgot-link {
+    display: block;
+    color: #2563eb;
+    font-size: 14px;
+    margin-top: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  /* Error */
+  .error-text {
+    color: #e11d48;
+    font-size: 14px;
+    margin-top: 12px;
+  }

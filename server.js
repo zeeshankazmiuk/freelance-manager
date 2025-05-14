@@ -11,23 +11,16 @@ const messagesRoutes = require('./routes/messagesRoutes');
 const scrapeRoutes = require('./routes/scrapeRoutes');
 
 
-// initialize express
+// set up express
 const app = express();
 const port = 3001;
 
-// enable cors
-// app.use(cors());
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],      // temp disabling cors for debugging
   allowedHeaders: ['Content-Type']
 }));
 app.use(express.json());
-
-
-
-
-
 
 // create server for socketio
 const server = http.createServer(app);
@@ -37,7 +30,6 @@ const io = new Server(server, {
     methods: ['GET', 'POST']
   }
 });
-
 
 // mongodb connection
 mongoose
@@ -65,7 +57,7 @@ io.on('connection', socket => {
   // receive and broadcast a message
   socket.on('message', (msg) => {
     console.log(`New message in room ${msg.room}:`, msg);
-    io.to(msg.room).emit('newMessage', msg);  // Broadcast to everyone in the room
+    io.to(msg.room).emit('newMessage', msg); 
   });
 
   socket.on('disconnect', () => {
@@ -74,10 +66,10 @@ io.on('connection', socket => {
 });
 
 
-// use the routes
-//app.use('/api/jobs', jobsRoutes);     // GET /api/jobs, etc.
-//app.use('/api/users', usersRoutes);   // POST /api/users/login, etc.
-//app.use('/api/tasks', tasksRoutes);   // POST /api/tasks/create-task, etc.
+// set up routes
+//app.use('/api/jobs', jobsRoutes);     
+//app.use('/api/users', usersRoutes);   
+//app.use('/api/tasks', tasksRoutes);  
 
 app.use('/api', jobsRoutes);
 //app.use('/api', tasksRoutes);
@@ -89,17 +81,14 @@ app.use('/api', scrapeRoutes);
 
 app.use((req, res) => {
 
-  res.status(404).json({ error: 'Route not found' });
+  res.status(404).json({error: 'Route not found'});
 });
 
 
-/*app.all('*', (req, res) => {
-  console.log(`❓ Unmatched Route Hit: ${req.method} ${req.originalUrl}`);
-  res.status(404).send('Route not found');
-});*/
+
 
 
 // start server
 server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running, port used: http://localhost:${port}`);
 });

@@ -6,6 +6,7 @@ import TasksPage from './pages/TasksPage';
 import YourTasksPage from './pages/YourTasksPage';
 import DMsPage from './pages/DMsPage';
 import FindJobsPage from './pages/FindJobsPage';
+import OnboardingPage from './pages/OnboardingPage';
 import Login from './components/Login';
 import UserButton from './components/UserButton';
 import { fetchUsers } from './services/apiService';
@@ -22,8 +23,8 @@ function App() {
   const handleLogin = (username, role) => setUser({ username, role });
 
   const handleLogout = () => {
-    localStorage.removeItem('user');  // or however you're handling auth
-    window.location.reload();         // refresh to kick back to login screen
+    localStorage.removeItem('user');  
+    window.location.reload();       
   };
 
   useEffect(() => {
@@ -99,6 +100,15 @@ function App() {
           <button className={activeTab === 'your-tasks' ? 'active' : ''} onClick={() => setActiveTab('your-tasks')}>Your Tasks</button>
         )}
         <button className={activeTab === 'dms' ? 'active' : ''} onClick={() => setActiveTab('dms')}>DMs</button>
+        {user.role === 'admin' && (
+          <button
+            className={activeTab === 'onboarding' ? 'active' : ''}
+            onClick={() => setActiveTab('onboarding')}
+          >
+            Onboarding
+          </button>
+        )}
+
         <div className="user-info" onClick={() => setShowLogout(!showLogout)}>
           <span>{user.username}</span>
           {showLogout && (
@@ -114,6 +124,7 @@ function App() {
         {activeTab === 'tasks' && <TasksPage user={user} onStartDM={handleStartDM} />}
         {activeTab === 'your-tasks' && <YourTasksPage user={user} onStartDM={handleStartDM} />}
         {activeTab === 'dms' && <DMsPage ref={dmsRef} user={user} dmRooms={dmRooms} setDmRooms={setDmRooms} />}
+        {activeTab === 'onboarding' && <OnboardingPage />}
         {activeTab === 'find-jobs' && (
           <div className="w-full flex justify-center">
             <FindJobsPage user={user} />

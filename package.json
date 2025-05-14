@@ -12,23 +12,28 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "electron": "^33.2.1"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "electron": "^33.2.1",
+    "playwright": "^1.51.1"
   },
   "dependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-syntax-flow": "^7.26.0",
     "@babel/plugin-transform-react-jsx": "^7.25.9",
     "axios": "^1.7.9",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "lucide-react": "^0.501.0",
     "mongoose": "^8.9.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.12.0",
+    "nodemailer": "^6.10.1",
     "oauth": "^0.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "typescript": "^5.7.2"
   }
 }

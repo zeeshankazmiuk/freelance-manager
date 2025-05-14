@@ -57,20 +57,20 @@ function JobsPage({ user }) {
         console.log('log from JobsPage.js: createTaskWithAxios failed');
         if (error.response) {
           // The request was made and the server responded with a status code that is not 2xx
-          console.error('❌ Failed to create task - Server responded with an error:');
+          console.error('Failed to create task - Server responded with an error:');
           console.error('Status Code:', error.response.status);
           console.error('Response Data:', error.response.data);
           console.error('Response Headers:', error.response.headers);
         } else if (error.request) {
           // The request was made but no response was received
-          console.error('❌ Failed to create task - No response received from server:');
+          console.error('Failed to create task - No response received from server:');
           console.error('Request Data:', error.request);
         } else {
           // Something went wrong in setting up the request
-          console.error('❌ Failed to create task - Error setting up request:', error.message);
+          console.error('Failed to create task - Error setting up request:', error.message);
         }
     
-        console.error('❌ Full Error Object for debugging:', error.toJSON ? error.toJSON() : error);
+        console.error('Full Error Object for debugging:', error.toJSON ? error.toJSON() : error);
       });    
   };
 
@@ -173,6 +173,8 @@ function JobsPage({ user }) {
                     value={taskDescription}
                     onChange={(e) => setTaskDescription(e.target.value)}
                     placeholder="Enter task description"
+                    rows={6}
+                    style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', resize: 'vertical' }}
                   />
                 </div>
                 <button type="submit">Add Task</button>
